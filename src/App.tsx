@@ -16,6 +16,8 @@ import IndexPage from './pages/IndexPage';
 
 import PageNotFound from './pages/PageNotFound';
 
+import socket from './socket/socket';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -24,6 +26,8 @@ const App = () => {
   const location = useLocation()
 
   useEffect(() => { processCookies() }, []) // Queries user for permisission to use cookies
+
+  useEffect(() => { socket() }, []) // Queries user for permisission to use cookies
 
 
   return (

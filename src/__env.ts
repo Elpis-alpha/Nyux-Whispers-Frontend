@@ -14,7 +14,7 @@ export const tokenCookieName = "nyux-whispers-user-token"
 // Dynamic Variables
 export const host = window ? window.location.origin : process.env.REACT_APP_HOST
 
-export const backendLocation = process.env.REACT_APP_BACK_END
+export const backendLocation: string = process.env.REACT_APP_BACK_END ? process.env.REACT_APP_BACK_END : ""
 
 export const isProduction = process.env.REACT_APP_IS_PRODUCTION === "true"
 

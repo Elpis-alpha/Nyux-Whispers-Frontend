@@ -198,7 +198,7 @@ const NavBarStyle = styled.div`
 
   nav {
     z-index: 15;
-    background: linear-gradient(rgba(166, 111, 81, .4), transparent);
+    background: linear-gradient(rgba(166, 111, 81, .3), transparent);
 
     .in-nav {
       display: flex;
