@@ -162,7 +162,7 @@ h6 {
 body{
   min-height: 100vh;
   font-size: 1pc;
-  line-height: 2pc;
+  line-height: 2.5pc;
   font-family: Main, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   background-color: #fff;
   color: #6a3e26;

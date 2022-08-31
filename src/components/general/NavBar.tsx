@@ -198,7 +198,8 @@ const NavBarStyle = styled.div`
 
   nav {
     z-index: 15;
-    background: linear-gradient(rgba(166, 111, 81, .3), transparent);
+    /* background: linear-gradient(rgba(166, 111, 81, .3), transparent); */
+    box-shadow: 0 2px 1px 0 rgba(166, 111, 81, .3);
 
     .in-nav {
       display: flex;
@@ -206,7 +207,7 @@ const NavBarStyle = styled.div`
       justify-content: space-between;
 
       h1 a {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem;
         display: block;
         color: inherit;
         text-decoration: none;

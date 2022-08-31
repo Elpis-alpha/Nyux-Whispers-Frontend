@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie'
 
 import { tokenCookieName } from '../__env'
 
-const getToken = () => {
+export const getToken = () => {
 
   const cookie = new Cookies()
 

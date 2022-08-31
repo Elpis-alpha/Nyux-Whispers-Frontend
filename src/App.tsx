@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import FetchAppData from './components/general/FetchAppData';
 
@@ -25,10 +25,11 @@ const App = () => {
 
   const location = useLocation()
 
+  const [startedSocket, setStartedSocket] = useState(false)
+
   useEffect(() => { processCookies() }, []) // Queries user for permisission to use cookies
 
-  useEffect(() => { socket() }, []) // Queries user for permisission to use cookies
-
+  useEffect(() => { if (!startedSocket) { setStartedSocket(true); socket() } }, [startedSocket]) // configure sockets
 
   return (
 

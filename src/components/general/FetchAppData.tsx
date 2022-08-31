@@ -28,7 +28,7 @@ const FetchBaseData = () => {
 
       const userData = await getApiJson(getUser())
 
-      console.log(userData);
+      // console.log(userData);
       
 
       if (userData.error) dispatch(removeUserData()) 
