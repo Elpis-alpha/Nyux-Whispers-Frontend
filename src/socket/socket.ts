@@ -7,6 +7,8 @@ import { backendLocation } from '../__env';
 
 export const socket = io(backendLocation, {
 
+  autoConnect: false, // comment this when you are ready
+
   auth: {
 
     token: getToken()

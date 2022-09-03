@@ -1,6 +1,6 @@
 {
   "short_name": "Nyux Whispers",
-  "name": "Nyux Whispers",
+  "name": "Nyux Whispers in Dark Theme",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#a66f51",
-  "background_color": "#a66f51"
+  "theme_color": "#121212",
+  "background_color": "#121212"
 }

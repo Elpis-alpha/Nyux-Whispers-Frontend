@@ -7,6 +7,8 @@ const displaySlice = createSlice({
 
   initialState: {
 
+    theme: 'Auto',
+
     showNav: true,
 
     revealView: false,
@@ -27,10 +29,16 @@ const displaySlice = createSlice({
 
     },
 
+    setTheme: (state, { payload }) => {
+
+      state.theme = payload
+
+    },
+
   }
 
 })
 
 export default displaySlice.reducer;
 
-export const { setShowNav, setRevealView } = displaySlice.actions
+export const { setShowNav, setRevealView, setTheme } = displaySlice.actions

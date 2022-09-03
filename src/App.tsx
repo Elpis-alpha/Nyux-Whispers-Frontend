@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import FetchAppData from './components/general/FetchAppData';
+import FetchAppData from './components/auth/FetchAppData';
 
 import { Route, Routes, useLocation } from 'react-router-dom';
 
 import ConfigureQuery from './components/general/ConfigureQuery';
 
 import { processCookies } from './controllers/GeneralCtrl';
-
-import NavBar from './components/general/NavBar';
 
 import BackgroundImage from './components/general/BackgroundImage';
 
@@ -17,6 +15,10 @@ import IndexPage from './pages/IndexPage';
 import PageNotFound from './pages/PageNotFound';
 
 import socket from './socket/socket';
+
+import HomePage from './pages/HomePage';
+
+import Protect from './components/auth/Protect';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -39,11 +41,11 @@ const App = () => {
 
       <ConfigureQuery />
 
-      <NavBar />
-
       <Routes location={location} key={location.pathname}>
 
         <Route path='/' element={<IndexPage />} />
+
+        <Route path='/me' element={<Protect page={HomePage}/>} />
 
         <Route path='*' element={<PageNotFound />} />
 

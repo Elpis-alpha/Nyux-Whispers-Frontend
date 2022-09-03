@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
+
 const GlobalStyle = createGlobalStyle`
 
 
@@ -164,13 +165,18 @@ body{
   font-size: 1pc;
   line-height: 2.5pc;
   font-family: Main, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  background-color: #fff;
-  color: #6a3e26;
+  background-color: ${props => props.theme.bg};
+  color: ${props => props.theme.col};
   overflow-x: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
+  transition: ${props => props.theme.globalTransition};
+}
+
+button, a, input {
+  transition: ${props => props.theme.globalTransition};
 }
 
 body > #root{
@@ -200,7 +206,8 @@ body > #root > .App {
 }
 
 a{
-  color: slategray;
+  color: ${props => props.theme.col};
+  text-decoration: underline;
 }
 
 button{

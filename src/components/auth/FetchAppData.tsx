@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllConversations, getUser } from "../../api";
 
 import { getApiJson } from "../../controllers/APICtrl";
+import { waitFor } from "../../controllers/TimeCtrl";
 
 import { removeConversationData, setConversationData, setRefetchConversation } from "../../store/slice/conversationSlice";
 
@@ -26,12 +27,11 @@ const FetchBaseData = () => {
 
       dispatch(setRefetchConversation(false))
 
+      await waitFor(60 * 60 * 1000)
+      
       const userData = await getApiJson(getUser())
 
-      // console.log(userData);
-      
-
-      if (userData.error) dispatch(removeUserData()) 
+      if (userData.error) dispatch(removeUserData())
 
       else dispatch(setUserData(userData))
 
@@ -46,7 +46,7 @@ const FetchBaseData = () => {
 
       const conversationData = await getApiJson(getAllConversations())
 
-      if (conversationData.error) dispatch(removeConversationData())
+      if (conversationData.error) { dispatch(removeConversationData()); dispatch(removeUserData()) }
 
       else dispatch(setConversationData(conversationData))
 
@@ -63,7 +63,7 @@ const FetchBaseData = () => {
 
       const conversationData = await getApiJson(getAllConversations())
 
-      if (conversationData.error) dispatch(removeConversationData())
+      if (conversationData.error) { dispatch(removeConversationData()); dispatch(removeUserData()) }
 
       else dispatch(setConversationData(conversationData))
 

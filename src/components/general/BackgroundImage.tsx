@@ -29,9 +29,11 @@ const BackgroundImageStyle = styled.div`
   justify-content: center;
 
   img {
-    max-width: 80%;
+    width: 80%;
+    height: 80%;
     display: block;
     opacity: .3;
+    object-fit: contain;
   }
 `
 

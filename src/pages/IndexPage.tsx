@@ -4,12 +4,16 @@ import { siteName } from "../__env"
 
 import { Link } from "react-router-dom"
 
+import NavBar from "../components/general/NavBar"
+
 
 const IndexPage = () => {
 
   return (
 
     <IndexPageStyle>
+
+      <NavBar />
 
       <h1>Welcome to {siteName}</h1>
 

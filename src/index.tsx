@@ -18,6 +18,8 @@ import reportWebVitals from './reportWebVitals';
 
 import { ToastContainer } from 'react-toastify';
 
+import ElpisTheme from './theme/ElpisTheme';
+
 
 const root = ReactDOM.createRoot(
 
@@ -25,23 +27,28 @@ const root = ReactDOM.createRoot(
 
 );
 
+
 root.render(
 
   <React.StrictMode>
 
     <Provider store={store}>
 
-      <Router>
+      <ElpisTheme>
 
-        <GlobalStyles />
+        <Router>
 
-        <App />
+          <GlobalStyles />
 
-        <Message />
+          <App />
 
-        <ToastContainer />
+          <Message />
 
-      </Router>
+          <ToastContainer />
+
+        </Router>
+
+      </ElpisTheme>
 
     </Provider>
 
