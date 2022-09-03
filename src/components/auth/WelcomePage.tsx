@@ -1,33 +1,33 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { SpinnerCircular } from "spinners-react";
 
 import styled, { useTheme } from "styled-components"
 
-import { setTheme } from "../../store/slice/displaySlice";
+import { reformImage } from "../../controllers/SpecialCtrl";
+
+import { siteName } from "../../__env";
 
 
-const WelcomePage = () => {
+const WelcomePage = ({ hide }: { hide: boolean }) => {
 
   const theme = useTheme()
 
-  const dispatch = useDispatch()
-
-
-
-  console.log(theme);
-
-
   return (
 
-    <WelcomePageStyle about="teal">
+    <WelcomePageStyle className={hide ? "hide" : ""}>
 
-      Distinctively drive dynamic meta-services whereas proactive relationships. Credibly plagiarize installed base infomediaries through scalable information. Efficiently fabricate interdependent internal or "organic" sources vis-a-vis backend alignments. Completely deploy collaborative methods of empowerment rather than reliable ideas. Collaboratively iterate business convergence vis-a-vis integrated vortals.
+      <div className="inner">
 
-      {/* Continually cultivate interdependent functionalities with functionalized infomediaries. Competently drive value-added communities vis-a-vis client-centered testing procedures. Appropriately build integrated innovation before premier networks. Professionally build cross functional methods of empowerment whereas real-time e-markets. Energistically provide access to state of the art benefits through exceptional internal or "organic" sources. */}
+        <img src="/images/assets/blur/logo-small.png" alt={siteName + ' logo'} onLoad={e => reformImage(e)} />
 
-      <button onClick={() => dispatch(setTheme("Light"))}>Light</button>
+        <h6>{siteName}</h6>
 
-      <button onClick={() => dispatch(setTheme("Dark"))}>Dark</button>
+      </div>
+
+      <div className="spinner-hol">
+
+        <SpinnerCircular color={theme.col} secondaryColor={theme.name === 'light' ? "#bbb" : "#444"} size="3pc" />
+
+      </div>
 
     </WelcomePageStyle>
 
@@ -37,8 +37,45 @@ const WelcomePage = () => {
 
 const WelcomePageStyle = styled.div`
 
-padding: 1pc;
+  padding: 1pc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: ${props => props.theme.bg};
+  transition: background-color .5s, opacity .49s;
+
+  &.hide {
+    opacity: 0;
+  }
+
+  .inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    img {
+      width: 50vw;
+      max-width: 150px;
+    }
+
+    h6 {
+      padding-top: .5pc;
+    }
+  }  
   
+  .spinner-hol {
+    position: fixed;
+    bottom: 2pc;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 export default WelcomePage

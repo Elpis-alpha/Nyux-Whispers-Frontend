@@ -20,6 +20,10 @@ import HomePage from './pages/HomePage';
 
 import Protect from './components/auth/Protect';
 
+import styled from 'styled-components';
+
+import ThemeChanger from './components/general/ThemeChanger';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -35,17 +39,19 @@ const App = () => {
 
   return (
 
-    <div className="App">
+    <AppStyle className="App">
 
       <FetchAppData />
 
       <ConfigureQuery />
 
+      <ThemeChanger />
+
       <Routes location={location} key={location.pathname}>
 
         <Route path='/' element={<IndexPage />} />
 
-        <Route path='/me' element={<Protect page={HomePage}/>} />
+        <Route path='/me' element={<Protect page={HomePage} />} />
 
         <Route path='*' element={<PageNotFound />} />
 
@@ -53,10 +59,43 @@ const App = () => {
 
       <BackgroundImage />
 
-    </div>
+    </AppStyle>
 
   )
 
 }
+
+const AppStyle = styled.div`
+
+  flex: 1;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  background-color: ${props => props.theme.bg};
+  color: ${props => props.theme.col};
+  transition: background-color .5s, color .5s;
+
+  >div {
+    z-index: 10;
+  }
+
+  button, a, input {
+    transition: background-color .5s, color .5s;
+    color: ${props => props.theme.col};
+  }
+
+  button{
+    border: 1px solid ${props => props.theme.col};
+    transition: background-color .5s, color .5s, border .5s;
+  }
+
+  svg {
+    transition: fill .5s, color .5s, border .5s;
+  }
+`
 
 export default App;

@@ -602,6 +602,24 @@ export const capitalize = (str: string) => {
 
 }
 
+export const splitCapital = (str: string) => {
+
+  let li = str.split('')
+
+  li = li.map(s => {
+
+    if (s === s.toUpperCase()) {
+
+      return `-${s.toLowerCase()}`
+      
+    } else return s
+
+  })
+
+  return li.join('')
+
+}
+
 export const apostrophifyName = (name: string) => {
 
   const end = name.length - 1
@@ -612,7 +630,7 @@ export const apostrophifyName = (name: string) => {
 
 }
 
-export const reformImage = (e: any, removeNext: boolean = true) => {
+export const reformImage = (e: any, removeNext = false, remove = true) => {
 
   const smallSize = e.currentTarget
 
@@ -630,7 +648,7 @@ export const reformImage = (e: any, removeNext: boolean = true) => {
 
       if (smallSize.nextElementSibling && removeNext) smallSize.nextElementSibling.remove()
 
-      smallSize.replaceWith(fullSize)
+      if (remove) smallSize.replaceWith(fullSize)
 
     } catch (error) {
 

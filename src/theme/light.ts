@@ -1,4 +1,9 @@
+import common from "./common"
+
+
 const light = {
+
+  ...common,
 
   name: 'light',
 
@@ -6,7 +11,13 @@ const light = {
 
   col: '#121212',
 
-  globalTransition: 'background-color .5s, color .5s',
+  rgbaSame: (a = .2) => `rgba(237, 237, 237, ${a})`,
+
+  rgbaOpp: (a = .2) => `rgba(19, 19, 19, ${a})`,
+
+  newMorph: (x = 10, y = 10, b = 20) => `
+    box-shadow: ${x}px ${y}px ${b}px #C6C6C6, -${x}px -${y}px ${b}px #FFFFFF;
+  `,
 
 }
 

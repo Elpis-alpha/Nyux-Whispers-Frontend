@@ -127,7 +127,7 @@ const ElpisTheme = ({ ...props }) => {
 
     }
 
-    return () => { clearTimeout(timeOut); console.log("cleared theme") }
+    return () => { clearTimeout(timeOut); }
 
   }, [displayTheme])
 

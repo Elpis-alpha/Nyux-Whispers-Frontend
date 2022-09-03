@@ -7,7 +7,7 @@ const displaySlice = createSlice({
 
   initialState: {
 
-    theme: 'Auto',
+    theme: localStorage.getItem('theme') ? localStorage.getItem('theme') : 'Auto',
 
     showNav: true,
 

@@ -27,8 +27,6 @@ const FetchBaseData = () => {
 
       dispatch(setRefetchConversation(false))
 
-      await waitFor(60 * 60 * 1000)
-      
       const userData = await getApiJson(getUser())
 
       if (userData.error) dispatch(removeUserData())

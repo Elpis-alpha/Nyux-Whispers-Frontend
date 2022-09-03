@@ -1,4 +1,5 @@
 import styled from "styled-components"
+
 import { reformImage } from "../../controllers/SpecialCtrl"
 
 
@@ -6,7 +7,7 @@ const BackgroundImage = () => {
 
   return (
 
-    <BackgroundImageStyle>
+    <BackgroundImageStyle style={{ zIndex: 5 }}>
 
       <img src="/images/assets/blur/text.png" alt="Text Logo" onLoad={e => reformImage(e, false)} />
 
@@ -22,7 +23,7 @@ const BackgroundImageStyle = styled.div`
   left: 0; right: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: 5;
 
   display: flex;
   align-items: center;
@@ -32,7 +33,7 @@ const BackgroundImageStyle = styled.div`
     width: 80%;
     height: 80%;
     display: block;
-    opacity: .3;
+    opacity: .2;
     object-fit: contain;
   }
 `

@@ -165,18 +165,11 @@ body{
   font-size: 1pc;
   line-height: 2.5pc;
   font-family: Main, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  background-color: ${props => props.theme.bg};
-  color: ${props => props.theme.col};
   overflow-x: hidden;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
-  transition: ${props => props.theme.globalTransition};
-}
-
-button, a, input {
-  transition: ${props => props.theme.globalTransition};
 }
 
 body > #root{
@@ -188,15 +181,6 @@ body > #root{
   flex-direction: column;
 }
 
-body > #root > .App {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
 .absolute-invisibility{
   position: absolute;
   display: none;
@@ -206,12 +190,10 @@ body > #root > .App {
 }
 
 a{
-  color: ${props => props.theme.col};
   text-decoration: underline;
 }
 
 button{
-  border: 1px solid grey;
   background-color: transparent;
   outline: 0 none;
   cursor: pointer;

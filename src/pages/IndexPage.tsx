@@ -21,6 +21,8 @@ const IndexPage = () => {
 
       <Link to="/login">Log in</Link>
 
+      <Link to="/me">Enter</Link>
+
     </IndexPageStyle>
 
   )

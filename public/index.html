@@ -24,21 +24,27 @@
 
   <meta name='application-name' content="%REACT_APP_NAME%" />
 
-  <meta name="theme-color" content="#ededed" id="theme-color" />
+  <script>
+    document.write(`<meta name="theme-color" content="${localStorage.getItem('theme') === 'Dark' ? '#121212' : '#ededed'}" id="theme-color" />`)
+  </script>
 
-  <meta name="description" content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
+  <meta name="description"
+    content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
 
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
 
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
 
-  <link rel="manifest" href="%PUBLIC_URL%/manifest_light.json" id="manifest-tag" />
+  <script>
+    document.write(`<link rel="manifest" href="${location.origin + (localStorage.getItem('theme') === 'Dark' ? '/manifest_dark.json' : '/manifest_light.json')}" id="manifest-tag" />`)
+  </script>
 
   <meta property="og:title" content="%REACT_APP_NAME%" />
 
   <meta property="og:url" content="%REACT_APP_HOST%" />
 
-  <meta property="og:description" content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
+  <meta property="og:description"
+    content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
 
   <meta property="og:type" content="website" />
 
@@ -62,7 +68,8 @@
 
   <meta name="twitter:title" content="%REACT_APP_NAME%" />
 
-  <meta name="twitter:description" content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
+  <meta name="twitter:description"
+    content="Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world" />
 
   <meta name="twitter:image" content="%REACT_APP_HOST%/images/og-image.png" />
 
