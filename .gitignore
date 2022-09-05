@@ -5,6 +5,7 @@
 /.pnp
 /.cscode
 .pnp.js
+.env
 
 # testing
 /coverage
