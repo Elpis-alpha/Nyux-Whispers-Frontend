@@ -1,6 +1,5 @@
 import { CSSProperties } from "styled-components"
 
-// @ts-ignore
 import { v4 } from "uuid"
 
 import { splitCapital } from "../controllers/SpecialCtrl"

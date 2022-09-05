@@ -1,6 +1,5 @@
 import { CSSProperties } from 'styled-components'
 
-// @ts-ignore
 import { v4 } from 'uuid'
 
 import { addMiniMessage, setNormalMessage, setSmallMessage, setXMessage, hideMiniMessage } from '../store/slice/messagesSlice'
