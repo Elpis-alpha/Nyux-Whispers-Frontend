@@ -7,6 +7,14 @@ import { splitCapital } from "../controllers/SpecialCtrl"
 
 const common = {
 
+  lightBg: '#ededed',
+
+  lightCol: '#121212',
+
+  darkBg: '#121212',
+
+  darkCol: '#ededed',
+
   flexing: (align = "center", justify = "center", dir = "row") => {
 
     return `
