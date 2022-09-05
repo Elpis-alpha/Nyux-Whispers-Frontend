@@ -2,24 +2,32 @@ import { useEffect, useMemo, useRef, useState } from "react"
 
 import styled from "styled-components"
 
+// @ts-ignore
+import { isEmail } from "validator"
+
+
 import { waitFor } from "../../controllers/TimeCtrl"
 
 import InputComponent from "../general/InputComponent"
 
 
-const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
+const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
 
   const innerRef = useRef(null)
+
+  const [hasStarted, setHasStarted] = useState(false)
 
   const [pageStage, setPageStage] = useState(0)
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 0, 2000], [0, 1, 3000], [0, 2, 2000], ["input", 1], [2, 0, 1500], [2, 1, 2000]], [])
+  const elementStages = useMemo(() => [[0, 0, 2000], [0, 1, 2000], [0, 2, 2000], ["input", 1], [2, 0, 1500]], [])
 
   useEffect(() => {
 
     const doStuff = async () => {
+
+      setHasStarted(true)
 
       const stageAction = elementStages[pageStage]
 
@@ -69,9 +77,9 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     }
 
-    doStuff()
+    if (!hasStarted) doStuff()
 
-  }, [pageStage, elementStages, setSignupStage])
+  }, [pageStage, elementStages, setSignupStage, hasStarted])
 
   const submitForm = (e: any) => {
 
@@ -83,13 +91,13 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     const val = form["ny-name-inp"].value
 
-    if (val.trim() === "") {
+    if (isEmail(val)) {
 
       setValidText("Name is too short")
 
     } else {
 
-      setSignupData({ ...signupData, name: val })
+      setSignupData({ ...signupData, email: val })
 
       setPageStage(pageStage + 1)
 
@@ -99,17 +107,17 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   return (
 
-    <StageOneStyle>
+    <StageTwoStyle>
 
       <div className="inner" ref={innerRef}>
 
         <div className="start-list">
 
-          <p className="heavy">Hello there</p>
+          <p className="heavy">Hello {signupData.name} <br /> Welcome to this platform</p>
 
-          <p>Actually before we start courtesy demands we exchange names.</p>
+          <p>Do you mind dropping your email address?</p>
 
-          <p>We're Nyux Whispers, what's your name?</p>
+          <p>We need it to start the registration</p>
 
         </div>
 
@@ -119,9 +127,13 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
             <div className="inp-cont">
 
-              <InputComponent label="Enter your name" valid={validText}
+              <InputComponent label="Enter your email" valid={validText}
 
-                input={<input required id="ny-name-inp" type="text" name="ny-name-inp" autoComplete="ny-name-inp" />} />
+                input={<input required id="ny-email-inp" name="ny-email-inp"
+
+                  onInput={e => setValidText(isEmail(e.currentTarget.value) ? "Invalid Email" : "")}
+
+                  type="text" autoComplete="ny-email-inp" />} />
 
             </div>
 
@@ -134,21 +146,19 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
         <div className="end-list">
 
-          <h3>{signupData.name}</h3>
-
-          <p>Has a nice ring to it</p>
+          <p>Perfect, now we can get started</p>
 
         </div>
 
       </div>
 
-    </StageOneStyle>
+    </StageTwoStyle>
 
   )
 
 }
 
-const StageOneStyle = styled.div`
+const StageTwoStyle = styled.div`
   width: 100%;
   flex: 1;
 
@@ -233,7 +243,7 @@ const StageOneStyle = styled.div`
   }
 `
 
-export default StageOne
+export default StageTwo
 
 
 
