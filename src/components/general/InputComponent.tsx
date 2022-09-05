@@ -55,7 +55,7 @@ const InputComponentStyle = styled.div`
       z-index: 20;
 
       &:valid + label, &:focus + label {
-        bottom: 1.5pc;
+        bottom: 1.7pc;
         font-size: .9pc;
       }
     }

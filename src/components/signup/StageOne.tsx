@@ -11,13 +11,15 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   const innerRef = useRef(null)
 
-  const [pageStage, setPageStage] = useState(0)
+  const [pageStage, setPageStage] = useState(5)
 
   const [validText, setValidText] = useState("")
 
   const elementStages = useMemo(() => [[0, 0, 2000], [0, 1, 3000], [0, 2, 2000], ["input", 1], [2, 0, 1500], [2, 1, 2000]], [])
 
   useEffect(() => {
+
+    console.log("first");
 
     const doStuff = async () => {
 

@@ -15,19 +15,21 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   const innerRef = useRef(null)
 
-  const [hasStarted, setHasStarted] = useState(false)
+  const [stageTracker, setStageTracker] = useState(0)
 
   const [pageStage, setPageStage] = useState(0)
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 0, 2000], [0, 1, 2000], [0, 2, 2000], ["input", 1], [2, 0, 1500]], [])
+  const elementStages = useMemo(() => [[0, 0, 1000], [0, 1, 2000], [0, 2, 1000], ["input", 1], [2, 0, 1500]], [])
 
   useEffect(() => {
 
     const doStuff = async () => {
 
-      setHasStarted(true)
+      setStageTracker(pageStage + 1)
+      
+      console.log("changing tracker to", pageStage + 1);
 
       const stageAction = elementStages[pageStage]
 
@@ -77,13 +79,17 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     }
 
-    if (!hasStarted) doStuff()
+    console.log("pageStage", pageStage, "stageTracker", stageTracker);
 
-  }, [pageStage, elementStages, setSignupStage, hasStarted])
+    if (pageStage === stageTracker) doStuff()
+
+  }, [pageStage, elementStages, setSignupStage, stageTracker])
 
   const submitForm = (e: any) => {
 
     e.preventDefault()
+
+    return setSignupStage("stage-1")
 
     setValidText("")
 
@@ -113,7 +119,17 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
         <div className="start-list">
 
-          <p className="heavy">Hello {signupData.name} <br /> Welcome to this platform</p>
+          <p className="heavy">
+
+            Hello {signupData.name}
+
+            <br />
+
+            Welcome to this platform
+
+            <button onClick={() => setSignupStage("stage-1")}>Click me</button>
+
+          </p>
 
           <p>Do you mind dropping your email address?</p>
 
