@@ -4,16 +4,12 @@ import { siteName } from "../__env"
 
 import { Link } from "react-router-dom"
 
-import NavBar from "../components/general/NavBar"
-
 
 const IndexPage = () => {
 
   return (
 
     <IndexPageStyle>
-
-      <NavBar />
 
       <h1>Welcome to {siteName}</h1>
 
@@ -31,7 +27,11 @@ const IndexPage = () => {
 
 const IndexPageStyle = styled.div`
   width: 100%;
-  padding: 1pc;
+  padding: 2pc;
+
+  h1 {
+    text-align: center;
+  }
 
   a {
     display: inline-block;

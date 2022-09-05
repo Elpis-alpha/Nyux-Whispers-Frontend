@@ -15,6 +15,10 @@ const light = {
 
   rgbaOpp: (a = .2) => `rgba(19, 19, 19, ${a})`,
 
+  rgbaFullSame: (a = .2) => `rgba(255, 255, 255, ${a})`,
+
+  rgbaFullOpp: (a = .2) => `rgba(0, 0, 0, ${a})`,
+
   newMorph: (x = 10, y = 10, b = 20) => `
     box-shadow: ${x}px ${y}px ${b}px #C6C6C6, -${x}px -${y}px ${b}px #FFFFFF;
   `,

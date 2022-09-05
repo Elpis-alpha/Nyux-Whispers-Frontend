@@ -1,0 +1,2 @@
+type animationType = "opacity" | "scale"
+

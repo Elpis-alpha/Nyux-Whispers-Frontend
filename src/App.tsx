@@ -24,6 +24,8 @@ import styled from 'styled-components';
 
 import ThemeChanger from './components/general/ThemeChanger';
 
+import SignupPage from './pages/SignupPage';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -50,6 +52,8 @@ const App = () => {
       <Routes location={location} key={location.pathname}>
 
         <Route path='/' element={<IndexPage />} />
+
+        <Route path='/signup' element={<SignupPage />} />
 
         <Route path='/me' element={<Protect page={HomePage} />} />
 
@@ -88,7 +92,7 @@ const AppStyle = styled.div`
     color: ${props => props.theme.col};
   }
 
-  button{
+  button, input {
     border: 1px solid ${props => props.theme.col};
     transition: background-color .5s, color .5s, border .5s;
   }

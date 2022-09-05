@@ -1,37 +1,33 @@
+import styled from "styled-components"
+
 const PageNotFound = () => {
 
   return (
 
-    <div style={{
-
-      width: "100%",
-
-      textAlign: "center",
-
-      flex: 1,
-
-      display: "flex",
-
-      alignItems: "center",
-
-      justifyContent: "center",
-
-      fontSize: "1.5pc",
-
-      lineHeight: "2.5pc",
-
-      fontWeight: "bold",
-
-      padding: "2pc",
-
-    }}>
+    <PageNotFoundStyle>
 
       {"Seemes you've reached a dead end"}
 
-    </div>
+    </PageNotFoundStyle>
 
   )
 
 }
+
+const PageNotFoundStyle = styled.div`
+
+  padding: 2pc;
+  font-weight: bold;
+  line-height: 2.5pc;
+  font-size: 1.5pc;
+  flex: 1;
+  text-align: center;
+  width: 100%;
+  
+  ${props => props.theme.flexing()}
+
+  ${props => props.theme.useAnimation("opacity")}
+
+`
 
 export default PageNotFound

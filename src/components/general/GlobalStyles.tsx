@@ -200,6 +200,11 @@ button{
   padding: 0 .5rem;
 }
 
+input {
+  outline: 0 none;
+  background-color: transparent;
+}
+
 
 /* Base Elements Styles */
 

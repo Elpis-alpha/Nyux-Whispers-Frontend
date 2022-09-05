@@ -1,6 +1,10 @@
 import { CSSProperties } from "styled-components"
 
+// @ts-ignore
+import { v4 } from "uuid"
+
 import { splitCapital } from "../controllers/SpecialCtrl"
+
 
 const common = {
 
@@ -37,6 +41,46 @@ const common = {
 
   },
 
+  useAnimation: (name: animationType, time = 0.5, reverse = false) => {
+
+    const identifier = "s" + v4()
+
+    let anim = ''
+
+    switch (name) {
+
+      case "opacity":
+
+        anim += `
+          @keyframes ${identifier} {
+            0% {opacity: 0};
+            100% {opacity: 1};
+          }
+        `
+
+        break;
+
+      case "scale":
+
+        anim += `
+          @keyframes ${identifier} {
+            0% {transform: scale(0)} 
+            100% {transform: scale(0)} 
+          }
+        `
+
+        break;
+
+      default: break;
+
+    }
+
+    anim += `animation: ${identifier} ${time}s 1 ${reverse ? "reverse" : ""};`
+
+    return anim
+
+  },
+
   transitions: (object: CSSProperties) => {
 
     let final = 'transition:'
@@ -53,11 +97,11 @@ const common = {
       }
 
     }
-    
+
     final = final.split('').slice(0, -1).join('')
 
     final += ';'
-    
+
     return final
 
   },
