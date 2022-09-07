@@ -72,6 +72,7 @@ const App = () => {
 const AppStyle = styled.div`
 
   flex: 1;
+  z-index: 10;
   width: 100%;
 
   display: flex;

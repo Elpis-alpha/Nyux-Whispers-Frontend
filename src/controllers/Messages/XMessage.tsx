@@ -93,8 +93,8 @@ const XMessageStyle = styled.div`
     line-height: 2pc;
     animation: slide-in-x-message-left 1s 1 ease-out;
     justify-content: flex-start;
-    background: linear-gradient(145deg, #cacaca, #f0f0f0);
-    box-shadow: 10px 10px 20px #7f7f7f, -10px -10px 20px #bdbdbd;
+    ${props => props.theme.newMorphMessages}
+    color: ${props => props.theme.col};
 
     .heading{
       font-size: 1.5pc;

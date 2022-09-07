@@ -48,9 +48,9 @@ const common = {
 
   },
 
-  useAnimation: (name: animationType, time = 0.5, reverse = false) => {
+  useAnimation: (name: animationType, id?: string, time = 0.5, reverse = false) => {
 
-    const identifier = "s" + v4()
+    const identifier = id ? id : "s" + v4()
 
     let anim = ''
 

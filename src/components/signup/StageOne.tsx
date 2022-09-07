@@ -11,61 +11,33 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   const innerRef = useRef(null)
 
-  const [pageStage, setPageStage] = useState(5)
+  const [pageStage, setPageStage] = useState(0)
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 0, 2000], [0, 1, 3000], [0, 2, 2000], ["input", 1], [2, 0, 1500], [2, 1, 2000]], [])
+  const elementStages = useMemo(() => [[0, 2000], [1, 2300], [2, 2000], [3], [4, 1000], [5, 1500]], [])
+
+  const stageAction = elementStages[pageStage]
+
+  const showOn = (index: number) => {
+
+    return stageAction[0] === index ? " show " : ""
+
+  }
 
   useEffect(() => {
-
-    console.log("first");
 
     const doStuff = async () => {
 
       const stageAction = elementStages[pageStage]
 
-      Array.from((innerRef.current as any)?.children).forEach((parent: any) => {
+      if (typeof stageAction[1] === "number") {
 
-        parent.classList.remove("show")
+        await waitFor(stageAction[1])
 
-        if (parent.classList.contains("sn")) return
+        if (pageStage === elementStages.length - 1) setSignupStage("stage-2")
 
-        Array.from(parent?.children).forEach((child: any) => {
-
-          child.classList.remove("show")
-
-        })
-
-      })
-
-      if (!stageAction) {
-
-        setSignupStage("stage-2")
-
-      } else if (typeof stageAction[0] === "number") {
-
-        // @ts-ignore
-        const targetParent = innerRef.current?.children[stageAction[0]] as HTMLElement
-
-        targetParent?.classList?.add('show')
-
-        // @ts-ignore
-        const target = innerRef.current?.children[stageAction[0]]?.children[stageAction[1]] as HTMLElement
-
-        target?.classList?.add('show')
-
-        // @ts-ignore
-        await waitFor(stageAction[2])
-
-        setPageStage(pageStage + 1)
-
-      } else {
-
-        // @ts-ignore
-        const targetParent = innerRef.current?.children[stageAction[1]] as HTMLElement
-
-        targetParent?.classList?.add('show')
+        else setPageStage(pageStage + 1)
 
       }
 
@@ -105,19 +77,15 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
       <div className="inner" ref={innerRef}>
 
-        <div className="start-list">
+        <div className="stage-list">
 
-          <p className="heavy">Hello there</p>
+          <p className={"heavy" + showOn(0)}>Hello there</p>
 
-          <p>Actually before we start courtesy demands we exchange names.</p>
+          <p className={showOn(1)}>Actually before we start courtesy demands we exchange names.</p>
 
-          <p>We're Nyux Whispers, what's your name?</p>
+          <p className={showOn(2)}>We're Nyux Whispers, what's your name?</p>
 
-        </div>
-
-        <div className="reveal sn">
-
-          <form onSubmit={submitForm}>
+          <form onSubmit={submitForm} className={showOn(3)}>
 
             <div className="inp-cont">
 
@@ -131,14 +99,9 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
           </form>
 
+          <h3 className={showOn(4)}>{signupData.name}</h3>
 
-        </div>
-
-        <div className="end-list">
-
-          <h3>{signupData.name}</h3>
-
-          <p>Has a nice ring to it</p>
+          <p className={showOn(5)}>Has a nice ring to it</p>
 
         </div>
 
@@ -165,17 +128,8 @@ const StageOneStyle = styled.div`
       width: 90%;
     }
 
-    .reveal, .end {
-      display: none;
-
-      &.show {
-        display: block;
-        ${props => props.theme.useAnimation("opacity")}
-      }
-    }
-
-    .start-list, .end-list {
-      display: none;
+    .stage-list {
+      display: block;
 
       p {
 
@@ -189,49 +143,60 @@ const StageOneStyle = styled.div`
         line-height: 2.5pc;
       }
 
-      &.show {
-        display: block;
-      }
-
+      
       > * {
         display: none;
 
         &.show {
           display: block;
           width: 100%;
-          ${props => props.theme.useAnimation("opacity")}
+          ${props => props.theme.useAnimation("opacity", "kjasdk")}
+        }
+      }
+
+      form {
+        &.show {
+          ${p => p.theme.flexing("center", "stretch")}
+
+          @media screen and (max-width: 500px) {
+            flex-direction: column;
+  
+            .inp-cont {
+              width: 100%;
+            }
+            
+            button {
+              width: 100%;
+              margin: 0;
+            }
+          }
+        }
+
+        .inp-cont {
+          flex: 1;
+        }
+        
+        button {
+          display: block;
+          margin: 0 auto;
+          margin-left: 1pc;
+          /* margin-bottom: .5pc; */
+          border: 0 none;
+          padding: 0pc 2pc;
+          border-radius: 0.5pc;
+          background-color: ${props => props.theme.bg};
+          box-shadow: -2px -2px 4px ${props => props.theme.rgbaFullSame(.5)}, 2px 2px 4px ${props => props.theme.rgbaFullOpp(.3)};
+
+          &:hover {
+            box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
+          }
+
+          &:disabled {
+            opacity: 0.3;
+          }
         }
       }
     }
-
-    form {
-      ${p => p.theme.flexing("center", "stretch")}
-
-      .inp-cont {
-        flex: 1;
-      }
-      
-      button {
-        display: block;
-        margin: 0 auto;
-        margin-left: 1pc;
-        /* margin-bottom: .5pc; */
-        border: 0 none;
-        padding: 0pc 2pc;
-        border-radius: 0.5pc;
-        background-color: ${props => props.theme.bg};
-        box-shadow: -2px -2px 4px ${props => props.theme.rgbaFullSame(.5)}, 2px 2px 4px ${props => props.theme.rgbaFullOpp(.3)};
-
-        &:hover {
-          box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
-        }
-
-        &:disabled {
-          opacity: 0.3;
-        }
-      }
-    }
-
   }
 `
 

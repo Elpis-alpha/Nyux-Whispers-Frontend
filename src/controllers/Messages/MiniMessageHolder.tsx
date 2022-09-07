@@ -29,6 +29,7 @@ const MiniMessageHolderStyle = styled.div`
   bottom: 1pc;
   margin: 0 auto;
   display: block;
+  z-index: 550;
 `
 
 export default MiniMessageHolder

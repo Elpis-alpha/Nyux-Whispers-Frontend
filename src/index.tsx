@@ -1,24 +1,26 @@
 import React from 'react';
 
+import Loader from './controllers/Loaders/Loader';
+
 import Message from './controllers/Messages/Message';
 
 import GlobalStyles from './components/general/GlobalStyles';
 
-import store from './store/store';
-
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import App from './App';
+
+import store from './store/store';
 
 import { Provider } from 'react-redux';
 
 import ReactDOM from 'react-dom/client';
 
-import App from './App';
-
-import reportWebVitals from './reportWebVitals';
+import ElpisTheme from './theme/ElpisTheme';
 
 import { ToastContainer } from 'react-toastify';
 
-import ElpisTheme from './theme/ElpisTheme';
+import reportWebVitals from './reportWebVitals';
 
 
 const root = ReactDOM.createRoot(
@@ -44,6 +46,8 @@ root.render(
           <Message />
 
           <ToastContainer />
+
+          <Loader />
 
         </Router>
 

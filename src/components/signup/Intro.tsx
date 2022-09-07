@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
 
 import styled from "styled-components"
+import { sendFullLoader } from "../../controllers/LoadingCtrl"
+import { sendMiniMessage, sendNormalMessage, sendSmallMessage, sendXMessage } from "../../controllers/MessageCtrl"
 
 
 import { siteName } from "../../__env"
@@ -54,7 +56,7 @@ const IntroStyle = styled.div`
 
   ${p => p.theme.flexing()}
 
-  ${props => props.theme.useAnimation("opacity")}
+  ${props => props.theme.useAnimation("opacity", "kjsdkdfsj")}
 
   .inner {
     width: 90%;

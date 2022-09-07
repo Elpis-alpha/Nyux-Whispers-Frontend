@@ -23,6 +23,16 @@ const dark = {
     box-shadow: ${x}px ${y}px ${b}px #0F0F0F, -${x}px -${y}px ${b}px #252525;
   `,
 
+  newMorph2: `
+    background: linear-gradient(145deg, #131313, #101010);
+    box-shadow:  10px 10px 20px #0e0e0e,-10px -10px 20px #171717;
+  `,
+
+  newMorphMessages: `
+    background: linear-gradient(145deg, #131313, #101010);
+    box-shadow:  10px 10px 20px #0e0e0e,-10px -10px 20px #171717;
+  `
+
 }
 
 export default dark

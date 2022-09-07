@@ -42,7 +42,7 @@ const SmallMessageStyle = styled.div`
 
   position: fixed;
   top: 10vh; left: 15vw;
-  z-index: 50;
+  z-index: 250;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -56,13 +56,13 @@ const SmallMessageStyle = styled.div`
     display: flex;
     border-radius: 1pc;
     padding: 1pc;
-    background: linear-gradient(145deg, #cacaca, #f0f0f0);
     text-align: center;
-    /* background: #e0e0e0; */
-    box-shadow: 10px 10px 20px #797979, -10px -10px 20px #fff;
+    ${props => props.theme.newMorphMessages}
+    color: ${props => props.theme.col};
     font-size: 1pc;
     line-height: 2pc;
     flex-direction: column;
+    transition: box-shadow .5s, color .5s, background-color .5s;
 
     .heading{
       font-size: 1.5pc;

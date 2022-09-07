@@ -8,6 +8,8 @@ import displaySlice from "./slice/displaySlice";
 
 import querySlice from "./slice/querySlice";
 
+import loadingSlice from "./slice/loadingSlice";
+
 import conversationSlice from "./slice/conversationSlice";
 
 
@@ -24,6 +26,8 @@ const store = configureStore({
     display: displaySlice,
 
     messages: messagesSlice,
+
+    loading: loadingSlice
 
   }
 

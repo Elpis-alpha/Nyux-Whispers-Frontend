@@ -53,7 +53,7 @@ const NormalMessageStyle = styled.div`
   position: fixed;
   right: 0; top: 0;
   bottom: 0; left: 0;
-  z-index: 30;
+  z-index: 220;
   align-items: center;
   justify-content: center;
   width: 100vw;
@@ -77,8 +77,8 @@ const NormalMessageStyle = styled.div`
     font-size: 1pc;
     line-height: 2pc;
     animation: slide-in-normal-message-left 1s 1 ease-out;
-    background: linear-gradient(145deg, #cacaca, #f0f0f0);
-    box-shadow: 10px 10px 20px #7f7f7f, -10px -10px 20px #bdbdbd;
+    ${props => props.theme.newMorphMessages}
+    color: ${props => props.theme.col};
 
     .heading{
       font-size: 1.5pc;

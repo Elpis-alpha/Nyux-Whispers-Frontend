@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // Just typescript stress
 let a: any = []
 
-const itemSlice = createSlice({
+const messageSlice = createSlice({
 
   name: "messages",
 
@@ -168,6 +168,6 @@ const itemSlice = createSlice({
 
 })
 
-export default itemSlice.reducer;
+export default messageSlice.reducer;
 
-export const { addMiniMessage, hideMiniMessage, removeMiniMessage, setNormalMessage, setNormalMessageAnswer, setSmallMessage, setXMessage, setXMessageAnswer } = itemSlice.actions
+export const { addMiniMessage, hideMiniMessage, removeMiniMessage, setNormalMessage, setNormalMessageAnswer, setSmallMessage, setXMessage, setXMessageAnswer } = messageSlice.actions

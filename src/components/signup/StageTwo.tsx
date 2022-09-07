@@ -4,6 +4,7 @@ import styled from "styled-components"
 
 // @ts-ignore
 import { isEmail } from "validator"
+import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
 
 
 import { waitFor } from "../../controllers/TimeCtrl"
@@ -15,99 +16,67 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   const innerRef = useRef(null)
 
-  const [stageTracker, setStageTracker] = useState(0)
-
   const [pageStage, setPageStage] = useState(0)
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 0, 1000], [0, 1, 2000], [0, 2, 1000], ["input", 1], [2, 0, 1500]], [])
+  const elementStages = useMemo(() => [[0, 1300], [1, 1500], [2, 1400], [3, 1500], [4], [5, 1000], [6, 1200]], [])
+
+  const stageAction = elementStages[pageStage]
+
+  const showOn = (index: number) => {
+
+    return stageAction[0] === index ? " show " : ""
+
+  }
 
   useEffect(() => {
 
     const doStuff = async () => {
 
-      setStageTracker(pageStage + 1)
-      
-      console.log("changing tracker to", pageStage + 1);
-
       const stageAction = elementStages[pageStage]
 
-      Array.from((innerRef.current as any)?.children).forEach((parent: any) => {
+      if (typeof stageAction[1] === "number") {
 
-        parent.classList.remove("show")
+        await waitFor(stageAction[1])
 
-        if (parent.classList.contains("sn")) return
+        if (pageStage === elementStages.length - 1) setSignupStage("stage-2")
 
-        Array.from(parent?.children).forEach((child: any) => {
-
-          child.classList.remove("show")
-
-        })
-
-      })
-
-      if (!stageAction) {
-
-        setSignupStage("stage-2")
-
-      } else if (typeof stageAction[0] === "number") {
-
-        // @ts-ignore
-        const targetParent = innerRef.current?.children[stageAction[0]] as HTMLElement
-
-        targetParent?.classList?.add('show')
-
-        // @ts-ignore
-        const target = innerRef.current?.children[stageAction[0]]?.children[stageAction[1]] as HTMLElement
-
-        target?.classList?.add('show')
-
-        // @ts-ignore
-        await waitFor(stageAction[2])
-
-        setPageStage(pageStage + 1)
-
-      } else {
-
-        // @ts-ignore
-        const targetParent = innerRef.current?.children[stageAction[1]] as HTMLElement
-
-        targetParent?.classList?.add('show')
+        else setPageStage(pageStage + 1)
 
       }
 
     }
 
-    console.log("pageStage", pageStage, "stageTracker", stageTracker);
+    doStuff()
 
-    if (pageStage === stageTracker) doStuff()
+  }, [pageStage, elementStages, setSignupStage])
 
-  }, [pageStage, elementStages, setSignupStage, stageTracker])
-
-  const submitForm = (e: any) => {
+  const submitForm = async (e: any) => {
 
     e.preventDefault()
-
-    return setSignupStage("stage-1")
 
     setValidText("")
 
     const form = e.target
 
-    const val = form["ny-name-inp"].value
+    const val = form["ny-email-inp"].value
 
-    if (isEmail(val)) {
+    sendFullLoader({ text: "Validating Email" })
 
-      setValidText("Name is too short")
+    // removeFullLoader()
 
-    } else {
+    // if (isEmail(val)) {
 
-      setSignupData({ ...signupData, email: val })
+    //   setValidText("Name is too short")
 
-      setPageStage(pageStage + 1)
+    // } else {
 
-    }
+    //   setSignupData({ ...signupData, email: val })
+
+    //   setPageStage(pageStage + 1)
+
+    // }
 
   }
 
@@ -117,29 +86,17 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
       <div className="inner" ref={innerRef}>
 
-        <div className="start-list">
+        <div className="stage-list">
 
-          <p className="heavy">
+          <p className={"heavy" + showOn(0)}>Hello {signupData.name}</p>
 
-            Hello {signupData.name}
+          <p className={showOn(1)}>Welcome to this platform</p>
 
-            <br />
+          <p className={showOn(2)}>Do you mind dropping your email address?</p>
 
-            Welcome to this platform
+          <p className={showOn(3)}>We need it to start the registration</p>
 
-            <button onClick={() => setSignupStage("stage-1")}>Click me</button>
-
-          </p>
-
-          <p>Do you mind dropping your email address?</p>
-
-          <p>We need it to start the registration</p>
-
-        </div>
-
-        <div className="reveal sn">
-
-          <form onSubmit={submitForm}>
+          <form onSubmit={submitForm} className={showOn(4)}>
 
             <div className="inp-cont">
 
@@ -153,16 +110,13 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
             </div>
 
-            <button>Send</button>
+            <button>Validate</button>
 
           </form>
 
+          <h3 className={showOn(5)}>{signupData.name}</h3>
 
-        </div>
-
-        <div className="end-list">
-
-          <p>Perfect, now we can get started</p>
+          <p className={showOn(6)}>Perfect, now we can get started</p>
 
         </div>
 
@@ -189,17 +143,8 @@ const StageTwoStyle = styled.div`
       width: 90%;
     }
 
-    .reveal, .end {
-      display: none;
-
-      &.show {
-        display: block;
-        ${props => props.theme.useAnimation("opacity")}
-      }
-    }
-
-    .start-list, .end-list {
-      display: none;
+    .stage-list {
+      display: block;
 
       p {
 
@@ -213,49 +158,60 @@ const StageTwoStyle = styled.div`
         line-height: 2.5pc;
       }
 
-      &.show {
-        display: block;
-      }
-
+      
       > * {
         display: none;
 
         &.show {
           display: block;
           width: 100%;
-          ${props => props.theme.useAnimation("opacity")}
+          ${props => props.theme.useAnimation("opacity", "kjasdk")}
+        }
+      }
+
+      form {
+        &.show {
+          ${p => p.theme.flexing("center", "stretch")}
+
+          @media screen and (max-width: 500px) {
+            flex-direction: column;
+  
+            .inp-cont {
+              width: 100%;
+            }
+            
+            button {
+              width: 100%;
+              margin: 0;
+            }
+          }
+        }
+
+        .inp-cont {
+          flex: 1;
+        }
+        
+        button {
+          display: block;
+          margin: 0 auto;
+          margin-left: 1pc;
+          /* margin-bottom: .5pc; */
+          border: 0 none;
+          padding: 0pc 2pc;
+          border-radius: 0.5pc;
+          background-color: ${props => props.theme.bg};
+          box-shadow: -2px -2px 4px ${props => props.theme.rgbaFullSame(.5)}, 2px 2px 4px ${props => props.theme.rgbaFullOpp(.3)};
+
+          &:hover {
+            box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
+          }
+
+          &:disabled {
+            opacity: 0.3;
+          }
         }
       }
     }
-
-    form {
-      ${p => p.theme.flexing("center", "stretch")}
-
-      .inp-cont {
-        flex: 1;
-      }
-      
-      button {
-        display: block;
-        margin: 0 auto;
-        margin-left: 1pc;
-        /* margin-bottom: .5pc; */
-        border: 0 none;
-        padding: 0pc 2pc;
-        border-radius: 0.5pc;
-        background-color: ${props => props.theme.bg};
-        box-shadow: -2px -2px 4px ${props => props.theme.rgbaFullSame(.5)}, 2px 2px 4px ${props => props.theme.rgbaFullOpp(.3)};
-
-        &:hover {
-          box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
-        }
-
-        &:disabled {
-          opacity: 0.3;
-        }
-      }
-    }
-
   }
 `
 
