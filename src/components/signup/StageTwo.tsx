@@ -4,6 +4,8 @@ import styled from "styled-components"
 
 // @ts-ignore
 import { isEmail } from "validator"
+import { userExistence } from "../../api"
+import { getApiJson } from "../../controllers/APICtrl"
 import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
 
 
@@ -60,9 +62,16 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     const form = e.target
 
-    const val = form["ny-email-inp"].value
+    const val = form["ny-email-inp"].value.trim()
 
     sendFullLoader({ text: "Validating Email" })
+
+    const existData = await getApiJson(userExistence(val))
+
+    console.log(existData);
+
+    removeFullLoader()
+    
 
     // removeFullLoader()
 
