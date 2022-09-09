@@ -24,7 +24,7 @@ export const deleteAvatar = () => `${backendLocation}/api/users/avatar/remove`
 
 export const getUserPicture = (userID: string, size = 'small') => `${backendLocation}/api/users/avatar/view?_id=${userID}&size=${size}`
 
-export const userExistence = (email: string) => `${backendLocation}/api/users/user/exists?email=${email}`
+export const userExistence = (email: string) => `${backendLocation}/api/users/exists?email=${email}`
 
 export const loginUser = () => `${backendLocation}/api/users/login`
 
@@ -37,5 +37,3 @@ export const createConversation = () => `${backendLocation}/api/conversation/cre
 export const createConversationGroup = () => `${backendLocation}/api/conversation/create-group`
 
 export const getAllConversations = () => `${backendLocation}/api/conversation/get-all`
-
-

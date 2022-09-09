@@ -1,29 +1,38 @@
 import { useEffect, useMemo, useRef, useState } from "react"
+import { SpinnerCircular } from "spinners-react"
 
-import styled from "styled-components"
+import styled, { useTheme } from "styled-components"
 
 // @ts-ignore
-import { isEmail } from "validator"
-import { userExistence } from "../../api"
-import { getApiJson } from "../../controllers/APICtrl"
-import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
-import { sendMiniMessage } from "../../controllers/MessageCtrl"
 
+import { isEmail } from "validator"
+
+import { userExistence } from "../../api"
+
+import { getApiJson } from "../../controllers/APICtrl"
+
+import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
+
+import { sendMiniMessage } from "../../controllers/MessageCtrl"
 
 import { waitFor } from "../../controllers/TimeCtrl"
 
 import InputComponent from "../general/InputComponent"
 
 
-const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
+const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
 
   const innerRef = useRef(null)
 
-  const [pageStage, setPageStage] = useState(0)
+  const { rgbaOpp, rgbaSame } = useTheme()
+
+  const [pageStage, setPageStage] = useState(3)
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 1300], [1, 1500], [2, 1400], [3, 1500], [4], [5, 1400]], [])
+  const [nameList, setNameList] = useState([])
+
+  const elementStages = useMemo(() => [[0, 2300], [1, 1500], [2, 1600], [3], [4], [5, 1850]], [])
 
   const stageAction = elementStages[pageStage]
 
@@ -43,7 +52,7 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
         await waitFor(stageAction[1])
 
-        if (pageStage === elementStages.length - 1) setSignupStage("stage-3")
+        if (pageStage === elementStages.length - 1) setSignupStage("stage-4")
 
         else setPageStage(pageStage + 1)
 
@@ -55,6 +64,19 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   }, [pageStage, elementStages, setSignupStage])
 
+  useEffect(() => {
+
+    const runAFunction = async () => {
+
+      const existData = await getApiJson(userExistence(signupData.name))
+
+    }
+
+    if (nameList.length === 0) runAFunction()
+
+  }, [nameList])
+
+
   const submitForm = async (e: any) => {
 
     e.preventDefault()
@@ -63,7 +85,7 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     const form = e.target
 
-    const val = form["ny-email-inp"].value.trim()
+    const val = form["ny-ID-inp"].value.trim()
 
     if (!isEmail(val)) {
 
@@ -107,47 +129,63 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   }
 
-  const inputHandler = (e: React.FormEvent<HTMLInputElement>) => {
+  const inputHandler = () => {
 
-    const text = e.currentTarget.value.trim()
-
-    setValidText(isEmail(text) ? "" : "Invalid Email")
-
-    if (text.length === 0) {
-
-      setValidText("")
-
-    }
+    // do nothing
 
   }
 
   return (
 
-    <StageTwoStyle>
+    <StageThreeStyle>
 
       <div className="inner" ref={innerRef}>
 
         <div className="stage-list">
 
-          <p className={"heavy" + showOn(0)}>Hello {signupData.name}</p>
+          <p className={showOn(0)}>As part of the registration, you need to provide a unique name that no one here has</p>
 
-          <p className={showOn(1)}>Welcome to this platform</p>
+          <p className={showOn(1)}>Sounds stressful right?</p>
 
-          <p className={showOn(2)}>Do you mind dropping your email address?</p>
+          <p className={showOn(2)}>That's why we thought up three different ones for you</p>
 
-          <p className={showOn(3)}>We need it to start the registration</p>
+          <div className={showOn(3)}>
+
+            {nameList.length === 0 && <div>
+
+              <SpinnerCircular size="8pc" color={rgbaOpp(1)} secondaryColor={rgbaOpp(.2)} />
+
+              <p>Loading names...</p>
+
+            </div>}
+
+            {nameList.length > 0 && <>
+
+              <p>You can still edit them if you want</p>
+
+              <div className="bt-hol">
+
+                {nameList.map(it => <button>{it}</button>)}
+
+                <button>None</button>
+
+              </div>
+
+            </>}
+
+          </div>
 
           <form onSubmit={submitForm} className={showOn(4)}>
 
             <div className="inp-cont">
 
-              <InputComponent label="Enter your email" valid={validText}
+              <InputComponent label="Enter your ID" valid={validText}
 
-                input={<input required id="ny-email-inp" name="ny-email-inp"
+                input={<input required id="ny-ID-inp" name="ny-ID-inp"
 
                   onInput={inputHandler}
 
-                  type="text" autoComplete="ny-email-inp" />} />
+                  type="text" autoComplete="ny-ID-inp" />} />
 
             </div>
 
@@ -155,19 +193,19 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
           </form>
 
-          <p className={showOn(5)}>Perfect, now we can get started</p>
+          <p className={showOn(5)}>Now your identity is established</p>
 
         </div>
 
       </div>
 
-    </StageTwoStyle>
+    </StageThreeStyle>
 
   )
 
 }
 
-const StageTwoStyle = styled.div`
+const StageThreeStyle = styled.div`
   width: 100%;
   flex: 1;
 
@@ -197,7 +235,6 @@ const StageTwoStyle = styled.div`
         line-height: 2.5pc;
       }
 
-      
       > * {
         display: none;
 
@@ -209,6 +246,7 @@ const StageTwoStyle = styled.div`
       }
 
       form {
+
         &.show {
           ${p => p.theme.flexing("center", "stretch")}
 
@@ -254,4 +292,4 @@ const StageTwoStyle = styled.div`
   }
 `
 
-export default StageTwo
+export default StageThree
