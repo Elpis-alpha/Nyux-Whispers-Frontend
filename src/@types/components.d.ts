@@ -9,6 +9,8 @@ interface SignUpStages {
 
     name: string;
 
+    emailCode: string;
+
     email: string;
 
     uniqueName: string;
@@ -22,6 +24,8 @@ interface SignUpStages {
     name: string;
 
     email: string;
+
+    emailCode: string;
 
     uniqueName: string;
 

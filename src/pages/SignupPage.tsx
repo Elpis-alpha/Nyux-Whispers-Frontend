@@ -14,12 +14,10 @@ import StageThree from "../components/signup/StageThree"
 const SignupPage = () => {
 
   const [signupData, setSignupData] = useState({
-
-    name: "Elpis", email: "elpis@gmail.com", uniqueName: "", password: ""
-
+    name: "", email: "", emailCode: "", uniqueName: "", password: ""
   })
 
-  const [signupStage, setSignupStage] = useState("stage-3") // initial
+  const [signupStage, setSignupStage] = useState("initial") // initial
 
   return (
 

@@ -1,36 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { SpinnerCircular } from "spinners-react"
-
 import styled, { useTheme } from "styled-components"
-
-// @ts-ignore
-
-import { isEmail } from "validator"
-
-import { userExistence } from "../../api"
-
-import { getApiJson } from "../../controllers/APICtrl"
-
-import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
-
-import { sendMiniMessage } from "../../controllers/MessageCtrl"
-
+import { v4 } from "uuid"
 import { waitFor } from "../../controllers/TimeCtrl"
-
+import { getApiJson } from "../../controllers/APICtrl"
 import InputComponent from "../general/InputComponent"
+import { userExistenceUID, userFindNames } from "../../api"
+import { sendMiniMessage } from "../../controllers/MessageCtrl"
+import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
 
 
 const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
 
   const innerRef = useRef(null)
 
-  const { rgbaOpp, rgbaSame } = useTheme()
+  const { rgbaOpp } = useTheme()
 
-  const [pageStage, setPageStage] = useState(3)
+  const [pageStage, setPageStage] = useState(0)
 
   const [validText, setValidText] = useState("")
 
-  const [nameList, setNameList] = useState([])
+  const [uniqueID, setUniqueID] = useState("")
+
+  const [nameList, setNameList] = useState<string[]>([])
 
   const elementStages = useMemo(() => [[0, 2300], [1, 1500], [2, 1600], [3], [4], [5, 1850]], [])
 
@@ -64,18 +56,51 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
   }, [pageStage, elementStages, setSignupStage])
 
+  // set name list
   useEffect(() => {
 
     const runAFunction = async () => {
 
-      const existData = await getApiJson(userExistence(signupData.name))
+      const { listOfNames, finalData, error } = await getApiJson(userFindNames(signupData.name))
+
+      if (error) {
+
+        setPageStage(prev => prev + 1)
+
+        return sendMiniMessage({
+
+          icon: { name: "times" },
+
+          content: { text: "An Error Occured" }
+
+        }, 2000)
+
+      }
+
+      // filter out the bad names
+      const goodNames = (listOfNames as string[]).filter(name => !(finalData as { uniqueName: string, verify: boolean }[]).map(data => data.uniqueName).includes(name))
+
+      if (goodNames.length === 0) {
+
+        setPageStage(prev => prev + 1)
+
+        return sendMiniMessage({
+
+          icon: { name: "times" },
+
+          content: { text: "We couldn't get you a name" }
+
+        }, 2000)
+
+      }
+
+      setNameList(goodNames.sort((a, b) => a.length - b.length).slice(0, 3))
 
     }
 
-    if (nameList.length === 0) runAFunction()
+    if (nameList.length === 0 && pageStage === 3) runAFunction()
 
-  }, [nameList])
-
+  }, [nameList, signupData.name, pageStage])
 
   const submitForm = async (e: any) => {
 
@@ -83,27 +108,25 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
     setValidText("")
 
-    const form = e.target
+    const val = uniqueID.trim()
 
-    const val = form["ny-ID-inp"].value.trim()
+    if (val.length < 1) {
 
-    if (!isEmail(val)) {
-
-      setValidText("Invalid Email")
+      setValidText("Invalid UID")
 
       return sendMiniMessage({
 
         icon: { name: "times" },
 
-        content: { text: "Invalid Email" }
+        content: { text: "Invalid UID" }
 
       }, 2000)
 
     }
 
-    sendFullLoader({ text: "Validating Email" })
+    sendFullLoader({ text: "Validating UID" })
 
-    const existData = await getApiJson(userExistence(val))
+    const existData = await getApiJson(userExistenceUID(val))
 
     if (existData.message === 'user does not exist') {
 
@@ -111,17 +134,17 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
         icon: { name: "ok" },
 
-        content: { text: "Valid Email" }
+        content: { text: "Valid UID" }
 
       }, 2000)
 
-      setSignupData({ ...signupData, email: val })
+      setSignupData({ ...signupData, uniqueName: val })
 
       setPageStage(pageStage + 1)
 
     } else {
 
-      setValidText("Email is taken")
+      setValidText("UID is taken")
 
     }
 
@@ -129,9 +152,14 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
   }
 
-  const inputHandler = () => {
+  const nameListClickHandler = (name: string) => {
+    setUniqueID(name)
+    setPageStage(prev => prev + 1)
+  }
 
-    // do nothing
+  const inputHandler = (e: React.FormEvent<HTMLInputElement>) => {
+
+    setUniqueID((e.target as HTMLInputElement).value.toLowerCase().trim())
 
   }
 
@@ -143,7 +171,7 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
         <div className="stage-list">
 
-          <p className={showOn(0)}>As part of the registration, you need to provide a unique name that no one here has</p>
+          <p className={showOn(0)}>As part of the registration, you need to provide a unique name (UID) that no one here has</p>
 
           <p className={showOn(1)}>Sounds stressful right?</p>
 
@@ -165,9 +193,9 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
               <div className="bt-hol">
 
-                {nameList.map(it => <button>{it}</button>)}
+                {nameList.map(it => <button key={v4()} onClick={() => nameListClickHandler(it)}>{it}</button>)}
 
-                <button>None</button>
+                <button onClick={() => nameListClickHandler("")}>None</button>
 
               </div>
 
@@ -179,11 +207,11 @@ const StageThree = ({ signupData, setSignupData, setSignupStage }: SignUpStages)
 
             <div className="inp-cont">
 
-              <InputComponent label="Enter your ID" valid={validText}
+              <InputComponent label="Enter your Unique ID (UID)" valid={validText}
 
                 input={<input required id="ny-ID-inp" name="ny-ID-inp"
 
-                  onInput={inputHandler}
+                  onInput={inputHandler} value={uniqueID}
 
                   type="text" autoComplete="ny-ID-inp" />} />
 
@@ -242,6 +270,33 @@ const StageThreeStyle = styled.div`
           display: block;
           width: 100%;
           ${props => props.theme.useAnimation("opacity", "kjasdk")}
+        }
+      }
+
+      .bt-hol {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        padding: 1pc;
+        
+        button {
+          display: block;
+          margin: .5pc 1pc;
+          /* margin-bottom: .5pc; */
+          border: 0 none;
+          padding: 0pc 2pc;
+          border-radius: 0.5pc;
+          background-color: ${props => props.theme.bg};
+          box-shadow: -2px -2px 4px ${props => props.theme.rgbaFullSame(.5)}, 2px 2px 4px ${props => props.theme.rgbaFullOpp(.3)};
+
+          &:hover {
+            box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
+          }
+
+          &:disabled {
+            opacity: 0.3;
+          }
         }
       }
 

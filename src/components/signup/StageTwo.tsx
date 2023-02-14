@@ -4,8 +4,8 @@ import styled from "styled-components"
 
 // @ts-ignore
 import { isEmail } from "validator"
-import { userExistence } from "../../api"
-import { getApiJson } from "../../controllers/APICtrl"
+import { createPreUser, userExistence, verifyPreUser } from "../../api"
+import { getApiJson, postApiJson } from "../../controllers/APICtrl"
 import { removeFullLoader, sendFullLoader } from "../../controllers/LoadingCtrl"
 import { sendMiniMessage } from "../../controllers/MessageCtrl"
 
@@ -23,7 +23,13 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
   const [validText, setValidText] = useState("")
 
-  const elementStages = useMemo(() => [[0, 1300], [1, 1500], [2, 1400], [3, 1500], [4], [5, 1400]], [])
+  const [resendable, setResendable] = useState(true)
+
+  const [counter, setCounter] = useState(0)
+
+  const [resendableTimeout, setResendableTimeout] = useState<{ t: any, i: any }>({ t: 0, i: 0 })
+
+  const elementStages = useMemo(() => [[0, 1300], [1, 1500], [2, 1400], [3, 1500], [4], [5, 1700], [6], [7, 1400]], [])
 
   const stageAction = elementStages[pageStage]
 
@@ -32,6 +38,14 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
     return stageAction[0] === index ? " show " : ""
 
   }
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(resendableTimeout.t)
+      clearInterval(resendableTimeout.i)
+    }
+  }, [resendableTimeout])
+
 
   useEffect(() => {
 
@@ -85,6 +99,10 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
     if (existData.message === 'user does not exist') {
 
+      await postApiJson(createPreUser(), {
+        email: val,
+      })
+
       sendMiniMessage({
 
         icon: { name: "ok" },
@@ -100,6 +118,126 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
     } else {
 
       setValidText("Email is taken")
+
+    }
+
+    removeFullLoader()
+
+  }
+
+  const resendEmail = async () => {
+
+    if (!resendable) return false
+
+    const meessageID = sendMiniMessage({
+
+      icon: { name: "loading" },
+
+      content: { text: "Sending Email" }
+
+    })
+
+    setResendable(false)
+
+    const emailStatus = await postApiJson(createPreUser(), {
+      email: signupData.email
+    })
+
+    if (emailStatus?.mailInfo?.message === "email sent") {
+
+      setResendable(false)
+
+      const tmxr = setTimeout(() => {
+        setResendable(true)
+      }, 10000)
+
+      setCounter(10)
+
+      const imxr = setInterval(() => {
+        setCounter(prev => {
+          if (prev === 1) clearInterval(imxr)
+          return prev - 1
+        })
+      }, 1000)
+
+      setResendableTimeout({ t: tmxr, i: imxr })
+
+      return sendMiniMessage({
+
+        id: meessageID,
+
+        icon: { name: "ok" },
+
+        content: { text: "Email Sent" }
+
+      }, 2000)
+
+    } else {
+
+      setResendable(true)
+
+      return sendMiniMessage({
+
+        id: meessageID,
+
+        icon: { name: "times" },
+
+        content: { text: "Sending Failed" }
+
+      }, 2000)
+
+    }
+
+  }
+
+  const submitValidateForm = async (e: any) => {
+
+    e.preventDefault()
+
+    setValidText("")
+
+    const form = e.target
+
+    const val = form["ny-email-val-inp"].value.trim()
+
+    if (val.length !== 6) {
+
+      setValidText("Invalid Code")
+
+      return sendMiniMessage({
+
+        icon: { name: "times" },
+
+        content: { text: "Invalid Code" }
+
+      }, 2000)
+
+    }
+
+    sendFullLoader({ text: "Validating Email" })
+
+    const validationData = await postApiJson(verifyPreUser(), {
+      email: signupData.email,
+      emailCode: val
+    })
+
+    if (validationData.verified) {
+
+      sendMiniMessage({
+
+        icon: { name: "ok" },
+
+        content: { text: "Valid Email" }
+
+      }, 2000)
+
+      setSignupData({ ...signupData, emailCode: val })
+
+      setPageStage(pageStage + 1)
+
+    } else {
+
+      setValidText("Invalid Email Code")
 
     }
 
@@ -155,7 +293,27 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
           </form>
 
-          <p className={showOn(5)}>Perfect, now we can get started</p>
+          <p className={showOn(5)}>Kindly check your mail for your verification code</p>
+
+          <form onSubmit={submitValidateForm} className={showOn(6)}>
+
+            <div className="inp-cont">
+
+              <InputComponent label="Enter the code" valid={validText}
+
+                input={<input required id="ny-email-val-inp" name="ny-email-val-inp"
+
+                  type="text" autoComplete="ny-email-val-inp" />} />
+
+            </div>
+
+            <button type="button" onClick={resendEmail} disabled={!resendable}>{counter === 0 ? "Resend" : counter + "s"}</button>
+
+            <button>Validate</button>
+
+          </form>
+
+          <p className={showOn(7)}>Perfect, now we can get started</p>
 
         </div>
 
@@ -222,6 +380,10 @@ const StageTwoStyle = styled.div`
             button {
               width: 100%;
               margin: 0;
+
+              &:nth-of-type(2) {
+                margin-top: 1pc;
+              }
             }
           }
         }
@@ -243,6 +405,10 @@ const StageTwoStyle = styled.div`
 
           &:hover {
             box-shadow: inset -2px -2px 8px ${props => props.theme.rgbaFullSame(.5)}, inset 2px 2px 8px ${props => props.theme.rgbaFullOpp(.1)};
+          }
+
+          &:disabled {
+            opacity: .4;
           }
 
           &:disabled {

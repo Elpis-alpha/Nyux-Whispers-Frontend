@@ -26,9 +26,23 @@ export const getUserPicture = (userID: string, size = 'small') => `${backendLoca
 
 export const userExistence = (email: string) => `${backendLocation}/api/users/exists?email=${email}`
 
+export const userExistenceUID = (UID: string) => `${backendLocation}/api/users/exists?uniqueName=${UID}`
+
+export const userFindNames = (sample: string) => `${backendLocation}/api/users/look-for-available-unique-names?sample=${sample}`
+
 export const loginUser = () => `${backendLocation}/api/users/login`
 
 export const logoutUser = (all?: boolean) => `${backendLocation}/api/users/logout${all ? "?all=true" : ""}`
+
+
+
+// Preuser
+export const verifyPreUser = () => `${backendLocation}/api/test-user/test`
+
+export const getPreUser = () => `${backendLocation}/api/test-user/retreive`
+
+export const createPreUser = () => `${backendLocation}/api/test-user/create`
+
 
 
 // Conversation
