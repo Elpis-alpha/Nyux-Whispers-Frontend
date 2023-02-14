@@ -9,6 +9,7 @@ import StageOne from "../components/signup/StageOne"
 import StageTwo from "../components/signup/StageTwo"
 
 import StageThree from "../components/signup/StageThree"
+import StageFour from "../components/signup/StageFour"
 
 
 const SignupPage = () => {
@@ -17,7 +18,7 @@ const SignupPage = () => {
     name: "", email: "", emailCode: "", uniqueName: "", password: ""
   })
 
-  const [signupStage, setSignupStage] = useState("initial") // initial
+  const [signupStage, setSignupStage] = useState("stage-4") // initial
 
   return (
 
@@ -30,6 +31,8 @@ const SignupPage = () => {
       {signupStage === "stage-2" && <StageTwo {...{ signupData, setSignupData, setSignupStage }} />}
 
       {signupStage === "stage-3" && <StageThree {...{ signupData, setSignupData, setSignupStage }} />}
+
+      {signupStage === "stage-4" && <StageFour {...{ signupData, setSignupData, setSignupStage }} />}
 
     </SignupPageStyle>
 

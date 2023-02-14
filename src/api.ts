@@ -37,11 +37,11 @@ export const logoutUser = (all?: boolean) => `${backendLocation}/api/users/logou
 
 
 // Preuser
-export const verifyPreUser = () => `${backendLocation}/api/test-user/test`
+export const verifyPreUser = () => `${backendLocation}/api/pre-user/test`
 
-export const getPreUser = () => `${backendLocation}/api/test-user/retreive`
+export const getPreUser = () => `${backendLocation}/api/pre-user/retreive`
 
-export const createPreUser = () => `${backendLocation}/api/test-user/create`
+export const createPreUser = () => `${backendLocation}/api/pre-user/create`
 
 
 
