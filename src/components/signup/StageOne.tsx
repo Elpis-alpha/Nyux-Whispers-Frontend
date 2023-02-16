@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
 import styled from "styled-components"
+import { requestFullScreen } from "../../controllers/SpecialCtrl"
 
 import { waitFor } from "../../controllers/TimeCtrl"
 
@@ -44,6 +45,8 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
     }
 
     doStuff()
+
+    if (pageStage === 0) requestFullScreen()
 
   }, [pageStage, elementStages, setSignupStage])
 
@@ -91,7 +94,7 @@ const StageOne = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
               <InputComponent label="Enter your name" valid={validText}
 
-                input={<input required id="ny-name-inp" type="text" name="ny-name-inp" autoComplete="ny-name-inp" />} />
+                input={<input required id="ny-name-inp" type="text" name="ny-name-inp" autoComplete="on" defaultValue={signupData.name} />} />
 
             </div>
 

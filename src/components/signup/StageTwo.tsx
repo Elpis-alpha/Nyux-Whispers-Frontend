@@ -283,9 +283,9 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
                 input={<input required id="ny-email-inp" name="ny-email-inp"
 
-                  onInput={inputHandler}
+                  onInput={inputHandler} defaultValue={signupData.email}
 
-                  type="text" autoComplete="ny-email-inp" />} />
+                  type="text" autoComplete="on" />} />
 
             </div>
 
@@ -303,7 +303,7 @@ const StageTwo = ({ signupData, setSignupData, setSignupStage }: SignUpStages) =
 
                 input={<input required id="ny-email-val-inp" name="ny-email-val-inp"
 
-                  type="text" autoComplete="ny-email-val-inp" />} />
+                  type="text" autoComplete="off" defaultValue={signupData.emailCode} />} />
 
             </div>
 

@@ -1,33 +1,42 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
-import { siteName } from "../../__env"
+import { shortSiteName } from "../../__env"
 
 
-const Intro = ({ setSignupStage }: SignUpIntro) => {
+const Average = ({ setSignupStage, signupData }: SignUpAverage) => {
+
+  const submitHandler = (e: any) => {
+    e.preventDefault()
+    console.log(signupData)
+  }
 
   return (
 
-    <IntroStyle>
+    <AverageStyle>
 
       <div className="inner">
 
         <div className="heading">
 
-          <h1>Welcome to {siteName}</h1>
+          <h1>Sign in to {shortSiteName}</h1>
 
         </div>
 
         <div className="body">
 
-          <p>Choose your experience</p>
+          <form onSubmit={submitHandler}>
 
-          <div className="but-hol">
+            <input type="text" />
 
-            <button onClick={() => setSignupStage('stage-1')}>An Immersive Experience</button>
+            <div className="but-hol">
 
-            <button onClick={() => setSignupStage('average')}>An Average Experience</button>
+              <button type="button" onClick={() => setSignupStage('initial')}>Go Back</button>
 
-          </div>
+              <button>Sign up</button>
+
+            </div>
+
+          </form>
 
         </div>
 
@@ -39,13 +48,13 @@ const Intro = ({ setSignupStage }: SignUpIntro) => {
 
       </div>
 
-    </IntroStyle>
+    </AverageStyle >
 
   )
 
 }
 
-const IntroStyle = styled.div`
+const AverageStyle = styled.div`
   width: 100%;
   flex: 1;
 
@@ -96,4 +105,4 @@ const IntroStyle = styled.div`
   }
 `
 
-export default Intro
+export default Average

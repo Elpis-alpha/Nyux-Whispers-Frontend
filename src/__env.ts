@@ -2,6 +2,8 @@ export const creator = "Elpis"
 
 export const siteName = "Nyux Whispers"
 
+export const shortSiteName = "Nyux"
+
 export const siteDescription = "Nyux Whispers presents you a fabulous experience on our chatting application where you can communicate with users around the world"
 
 export const emailName = "Nyux Whispers"

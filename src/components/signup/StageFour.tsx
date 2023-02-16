@@ -6,10 +6,13 @@ import { postApiJson } from "../../controllers/APICtrl"
 import InputComponent from "../general/InputComponent"
 import { createUser } from "../../api"
 import { sendMiniMessage } from "../../controllers/MessageCtrl"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setUserData } from "../../store/slice/userSlice"
 import { tokenCookieName } from "../../__env"
 import Cookies from "universal-cookie"
+import { useNavigate } from "react-router-dom"
+import { setRefetchConversation } from "../../store/slice/conversationSlice"
+import { requestFullScreen } from "../../controllers/SpecialCtrl"
 
 
 const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) => {
@@ -22,7 +25,13 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
 
   const [validText, setValidText] = useState("")
 
+  const [signUpError, setSignUpError] = useState(false)
+
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
+
+  const { available, tested } = useSelector((store: any) => store.conversation)
 
   const elementStages = useMemo(() => [[0, 2300], [1, 1500], [2], [3, 1500], [4], [5, 1500], [6], [7]], [])
 
@@ -59,15 +68,23 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
   // save user
   useEffect(() => {
 
+    let timeoutCancler: NodeJS.Timeout
+
     const runAFunction = async () => {
 
       const cookie = new Cookies()
+
+      setSignUpError(false)
 
       const userCreationData = await postApiJson(createUser(), signupData)
 
       const { user, token, error } = userCreationData
 
       if (error) {
+
+        console.log(error)
+
+        setSignUpError(true)
 
         return sendMiniMessage({
 
@@ -81,17 +98,26 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
 
       dispatch(setUserData({ ...user, token }))
 
+      dispatch(setRefetchConversation(true))
+
       cookie.set(tokenCookieName, token, { path: '/', expires: new Date(90 ** 7) })
-
-      setPageStage(prev => prev + 1)
-
-      // navigate('/me')
 
     }
 
-    if (pageStage === 60) runAFunction()
+    if (pageStage === 6) runAFunction()
 
-  }, [signupData, pageStage, dispatch])
+    if (pageStage === 7) timeoutCancler = setTimeout(() => { requestFullScreen(true); navigate('/me') }, 1800)
+
+    return () => { clearTimeout(timeoutCancler) }
+
+  }, [signupData, pageStage, dispatch, navigate])
+
+  // wait for user conversations before progressing
+  useEffect(() => {
+
+    if (pageStage === 6 && (available && tested)) setPageStage(prev => prev + 1)
+
+  }, [pageStage, available, tested])
 
   const submitForm1 = async (e: any) => {
 
@@ -171,7 +197,7 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
 
                 input={<input required id="ny-pass-inp" name="ny-pass-inp"
 
-                  type="password" autoComplete="ny-pass-inp" />} />
+                  type="password" autoComplete="on" defaultValue={signupData.password} />} />
 
             </div>
 
@@ -189,7 +215,7 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
 
                 input={<input required id="ny-pass2-inp" name="ny-pass2-inp"
 
-                  type="password" autoComplete="ny-pass2-inp" />} />
+                  type="password" autoComplete="on" />} />
 
             </div>
 
@@ -203,13 +229,33 @@ const StageFour = ({ signupData, setSignupData, setSignupStage }: SignUpStages) 
 
           <div className={showOn(6)}>
 
-            <div>
+            {!signUpError && <div>
 
               <SpinnerCircular size="8pc" color={rgbaOpp(1)} secondaryColor={rgbaOpp(.2)} />
 
               <p>Saving Account...</p>
 
-            </div>
+            </div>}
+
+            {signUpError && <>
+
+              <p>An error occured, would you like to change any of these data</p>
+
+              <div className="bt-hol">
+
+                <button onClick={() => setSignupStage("stage-1")}>Change Name</button>
+
+                <button onClick={() => setSignupStage("stage-2")}>Change Email</button>
+
+                <button onClick={() => setSignupStage("stage-3")}>Change UID</button>
+
+                <button onClick={() => setPageStage(0)}>Change Password</button>
+
+                <button onClick={() => navigate("/")}>No, take me back to the home page</button>
+
+              </div>
+
+            </>}
 
           </div>
 

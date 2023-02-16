@@ -29,8 +29,6 @@ const Protect = ({ page: Page }: { page: () => JSX.Element }) => {
 
   }, [status, tested])
 
-
-
   // Different cases and their responses
 
   // Hasn't been tested (still fetching) and not available | or its transitioning |, render welcome (when the user lands)

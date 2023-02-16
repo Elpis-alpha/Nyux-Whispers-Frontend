@@ -1,38 +1,55 @@
+type setSignupStage = React.Dispatch<React.SetStateAction<"initial"|"stage-1"|"stage-2"|"stage-3"|"stage-4"|"average">>;
+
+interface signupData {
+
+  name: string;
+
+  emailCode: string;
+
+  email: string;
+
+  uniqueName: string;
+
+  password: string;
+
+};
+
+type setSignupData = React.Dispatch<React.SetStateAction<{
+
+  name: string;
+
+  email: string;
+
+  emailCode: string;
+
+  uniqueName: string;
+
+  password: string;
+
+}>>;
+
 interface SignUpIntro {
 
-  setSignupStage: React.Dispatch<React.SetStateAction<string>>;
+  setSignupStage: setSignupStage
 
 }
+
 interface SignUpStages {
 
-  signupData: {
+  signupData: signupData
 
-    name: string;
+  setSignupData: setSignupData
 
-    emailCode: string;
+  setSignupStage: setSignupStage
 
-    email: string;
+}
 
-    uniqueName: string;
+interface SignUpAverage {
 
-    password: string;
+  signupData: signupData
 
-  };
+  setSignupData: setSignupData
 
-  setSignupData: React.Dispatch<React.SetStateAction<{
-
-    name: string;
-
-    email: string;
-
-    emailCode: string;
-
-    uniqueName: string;
-
-    password: string;
-
-  }>>;
-
-  setSignupStage: React.Dispatch<React.SetStateAction<string>>;
+  setSignupStage: setSignupStage
 
 }
